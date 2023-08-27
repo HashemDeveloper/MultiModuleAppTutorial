@@ -10,6 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.compose.rememberNavController
+import com.jrsoft.jetpack.tutorial.multimoduleapp.navigation.Screen
+import com.jrsoft.jetpack.tutorial.multimoduleapp.navigation.SetupNavigationGraph
 import com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.MultiModuleAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -30,6 +33,11 @@ private fun EntryPoint() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
         ) {
+            val navController = rememberNavController()
+            SetupNavigationGraph(
+                startDestination = Screen.Authentication.route,
+                navController = navController
+            )
         }
     }
 }
