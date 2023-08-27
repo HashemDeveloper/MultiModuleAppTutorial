@@ -27,8 +27,14 @@ class AuthenticationViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val result = withContext(Dispatchers.IO) {
+                    // this works but in Mongo Atlas is not able fetch auth providers
+                    // meaning not able to get user details e.g name, picture, email etc
+                    // to be able to fix that we're going to be using JWT token provider
+//                    App.Companion.create(Constants.MONGO_DB_APP_ID)
+//                        .login(Credentials.google(tokenId, GoogleAuthType.ID_TOKEN)).loggedIn
+
                     App.Companion.create(Constants.MONGO_DB_APP_ID)
-                        .login(Credentials.google(tokenId, GoogleAuthType.ID_TOKEN)).loggedIn
+                        .login(Credentials.jwt(tokenId)).loggedIn
                 }
                 withContext(Dispatchers.Main) {
                     onSuccess.invoke(result)
