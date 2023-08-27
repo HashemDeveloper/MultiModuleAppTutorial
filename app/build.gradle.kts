@@ -113,6 +113,9 @@ dependencies {
     // One Tap Google Signing composes
     implementation("com.github.stevdza-san:OneTapCompose:1.0.0")
 
+    // Message bar compose
+    implementation("com.github.stevdza-san:MessageBarCompose:1.0.5")
+
     // Desugar JDK
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 }

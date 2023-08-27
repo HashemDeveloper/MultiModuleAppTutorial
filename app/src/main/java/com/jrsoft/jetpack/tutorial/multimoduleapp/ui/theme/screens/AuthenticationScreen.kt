@@ -6,6 +6,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import com.jrsoft.jetpack.tutorial.multimoduleapp.utils.Constants
+import com.stevdzasan.messagebar.ContentWithMessageBar
+import com.stevdzasan.messagebar.MessageBarState
 import com.stevdzasan.onetap.OneTapSignInState
 import com.stevdzasan.onetap.OneTapSignInWithGoogle
 
@@ -15,18 +17,23 @@ import com.stevdzasan.onetap.OneTapSignInWithGoogle
 fun AuthenticationScreen(
     state: OneTapSignInState,
     loadingState: Boolean,
+    messageBarState: MessageBarState,
     onSignInClicked: () -> Unit
 ) {
     Scaffold(content = {
-        AuthenticationContent(loadingState = loadingState, onSignInClicked = onSignInClicked)
+        ContentWithMessageBar(messageBarState = messageBarState) {
+            AuthenticationContent(loadingState = loadingState, onSignInClicked = onSignInClicked)
+        }
     })
     OneTapSignInWithGoogle(
         state = state,
         clientId = Constants.GOOGLE_AUTH_CLIENT_ID,
         onTokenIdReceived = { tokeInd ->
             Log.d("AUTH", tokeInd)
+            messageBarState.addSuccess("Successfully authenticated")
         },
         onDialogDismissed = { message ->
             Log.d("AUTH", message)
+            messageBarState.addError(Exception(message))
         })
 }
