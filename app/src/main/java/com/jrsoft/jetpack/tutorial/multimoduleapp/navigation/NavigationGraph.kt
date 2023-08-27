@@ -1,6 +1,8 @@
 package com.jrsoft.jetpack.tutorial.multimoduleapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -8,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.screens.AuthenticationScreen
+import com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.screens.AuthenticationViewModel
 import com.jrsoft.jetpack.tutorial.multimoduleapp.utils.Constants.WRITE_SCREEN_DIARY_KEY
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
@@ -23,14 +26,30 @@ fun SetupNavigationGraph(startDestination: String, navController: NavHostControl
 
 fun NavGraphBuilder.authenticationRoute() {
     composable(route = Screen.Authentication.route) {
+        val viewModel: AuthenticationViewModel = viewModel()
+        val loadingState by viewModel.loadingState
         val oneTapState = rememberOneTapSignInState()
         val messageBarState = rememberMessageBarState()
         AuthenticationScreen(
             state = oneTapState,
-            loadingState = oneTapState.opened,
+            loadingState = loadingState,
             messageBarState = messageBarState,
             onSignInClicked = {
                 oneTapState.open()
+                viewModel.setLoading(true)
+            },
+            onTokenIdReceived = { tokenId ->
+                viewModel.signingWithMongoAtlas(tokenId = tokenId, onSuccess = { isSuccess ->
+                    if (isSuccess) {
+                        messageBarState.addSuccess("Successfully Authenticated")
+                        viewModel.setLoading(false)
+                    }
+                }, onError = { error ->
+                    messageBarState.addError(error)
+                })
+            },
+            onDialogDismissed = { ex ->
+                messageBarState.addError(Exception(ex))
             })
     }
 }

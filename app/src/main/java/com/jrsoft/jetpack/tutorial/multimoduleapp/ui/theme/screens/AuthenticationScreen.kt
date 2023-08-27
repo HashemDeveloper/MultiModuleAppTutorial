@@ -18,7 +18,9 @@ fun AuthenticationScreen(
     state: OneTapSignInState,
     loadingState: Boolean,
     messageBarState: MessageBarState,
-    onSignInClicked: () -> Unit
+    onSignInClicked: () -> Unit,
+    onTokenIdReceived: (String) -> Unit,
+    onDialogDismissed: (String) -> Unit
 ) {
     Scaffold(content = {
         ContentWithMessageBar(messageBarState = messageBarState) {
@@ -29,11 +31,9 @@ fun AuthenticationScreen(
         state = state,
         clientId = Constants.GOOGLE_AUTH_CLIENT_ID,
         onTokenIdReceived = { tokeInd ->
-            Log.d("AUTH", tokeInd)
-            messageBarState.addSuccess("Successfully authenticated")
+            onTokenIdReceived.invoke(tokeInd)
         },
         onDialogDismissed = { message ->
-            Log.d("AUTH", message)
-            messageBarState.addError(Exception(message))
+            onDialogDismissed.invoke(message)
         })
 }
