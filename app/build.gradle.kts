@@ -110,6 +110,9 @@ dependencies {
     // Coil
     implementation("io.coil-kt:coil-compose:2.2.2")
 
+    // One Tap Google Signing composes
+    implementation("com.github.stevdza-san:OneTapCompose:1.0.0")
+
     // Desugar JDK
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 }

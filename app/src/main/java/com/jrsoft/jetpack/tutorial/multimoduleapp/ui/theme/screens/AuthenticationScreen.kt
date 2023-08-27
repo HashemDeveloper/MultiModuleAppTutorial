@@ -1,15 +1,32 @@
 package com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import com.jrsoft.jetpack.tutorial.multimoduleapp.utils.Constants
+import com.stevdzasan.onetap.OneTapSignInState
+import com.stevdzasan.onetap.OneTapSignInWithGoogle
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AuthenticationScreen(loadingState: Boolean, onSignInClicked: () -> Unit) {
+fun AuthenticationScreen(
+    state: OneTapSignInState,
+    loadingState: Boolean,
+    onSignInClicked: () -> Unit
+) {
     Scaffold(content = {
         AuthenticationContent(loadingState = loadingState, onSignInClicked = onSignInClicked)
     })
+    OneTapSignInWithGoogle(
+        state = state,
+        clientId = Constants.GOOGLE_AUTH_CLIENT_ID,
+        onTokenIdReceived = { tokeInd ->
+            Log.d("AUTH", tokeInd)
+        },
+        onDialogDismissed = { message ->
+            Log.d("AUTH", message)
+        })
 }
