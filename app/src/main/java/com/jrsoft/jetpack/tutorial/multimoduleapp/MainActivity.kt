@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.jrsoft.jetpack.tutorial.multimoduleapp.navigation.Screen
 import com.jrsoft.jetpack.tutorial.multimoduleapp.navigation.SetupNavigationGraph
@@ -21,6 +22,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             EntryPoint()
         }

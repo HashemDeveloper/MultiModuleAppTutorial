@@ -28,7 +28,7 @@ class AuthenticationViewModel : ViewModel() {
 
     fun signingWithMongoAtlas(
         tokenId: String,
-        onSuccess: (Boolean) -> Unit,
+        onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
         viewModelScope.launch {
@@ -43,10 +43,14 @@ class AuthenticationViewModel : ViewModel() {
                     App.Companion.create(Constants.MONGO_DB_APP_ID)
                         .login(Credentials.jwt(tokenId)).loggedIn
                 }
-                withContext(Dispatchers.Main) {
-                    onSuccess.invoke(result)
-                    delay(600)
-                    setAuthenticated(true)
+                if (result) {
+                    withContext(Dispatchers.Main) {
+                        onSuccess.invoke()
+                        delay(600)
+                        setAuthenticated(true)
+                    }
+                } else {
+                    onError(Exception("User not logged in!"))
                 }
             } catch (ex: Exception) {
                 withContext(Dispatchers.Main) {
