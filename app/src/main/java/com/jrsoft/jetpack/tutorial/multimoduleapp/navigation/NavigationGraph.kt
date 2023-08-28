@@ -9,8 +9,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.screens.AuthenticationScreen
-import com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.screens.AuthenticationViewModel
+import com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.screens.auth.AuthenticationScreen
+import com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.screens.auth.AuthenticationViewModel
+import com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.screens.write.WriteScreen
 import com.jrsoft.jetpack.tutorial.multimoduleapp.utils.Constants.WRITE_SCREEN_DIARY_KEY
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
@@ -20,7 +21,7 @@ fun SetupNavigationGraph(startDestination: String, navController: NavHostControl
     NavHost(startDestination = startDestination, navController = navController) {
         authenticationRoute()
         homeRoute()
-        writeRoute()
+        writeRoute(onBackPressed = { navController.popBackStack()})
     }
 }
 
@@ -62,7 +63,7 @@ fun NavGraphBuilder.homeRoute() {
     }
 }
 
-fun NavGraphBuilder.writeRoute() {
+fun NavGraphBuilder.writeRoute(onBackPressed: () -> Unit) {
     composable(
         route = Screen.Write.route,
         arguments = listOf(navArgument(name = WRITE_SCREEN_DIARY_KEY) {
@@ -71,6 +72,6 @@ fun NavGraphBuilder.writeRoute() {
             defaultValue = null
         })
     ) {
-
+        WriteScreen(onBackPressed = onBackPressed)
     }
 }

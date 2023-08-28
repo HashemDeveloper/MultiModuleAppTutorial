@@ -1,4 +1,4 @@
-package com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.screens
+package com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.screens.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
