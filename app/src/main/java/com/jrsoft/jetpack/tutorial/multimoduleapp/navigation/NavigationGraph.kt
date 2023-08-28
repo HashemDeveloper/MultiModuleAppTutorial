@@ -19,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.screens.auth.AuthenticationScreen
 import com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.screens.auth.AuthenticationViewModel
+import com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.screens.home.HomeScreen
 import com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.screens.write.WriteScreen
 import com.jrsoft.jetpack.tutorial.multimoduleapp.utils.Constants.MONGO_DB_APP_ID
 import com.jrsoft.jetpack.tutorial.multimoduleapp.utils.Constants.WRITE_SCREEN_DIARY_KEY
@@ -35,7 +36,9 @@ fun SetupNavigationGraph(startDestination: String, navController: NavHostControl
             navController.popBackStack()
             navController.navigate(Screen.Home.route)
         })
-        homeRoute()
+        homeRoute(onMenuClicked = {}, navigateToWriteScreen = {
+            navController.navigate(Screen.Write.route)
+        })
         writeRoute(onBackPressed = { navController.popBackStack()})
     }
 }
@@ -74,20 +77,9 @@ fun NavGraphBuilder.authenticationRoute(navigateToHome: () -> Unit) {
     }
 }
 
-fun NavGraphBuilder.homeRoute() {
+fun NavGraphBuilder.homeRoute(onMenuClicked: () -> Unit, navigateToWriteScreen: () -> Unit) {
     composable(route = Screen.Home.route) {
-        val scope = rememberCoroutineScope()
-        Column(modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(onClick = {
-                scope.launch(Dispatchers.IO) {
-                    App.Companion.create(MONGO_DB_APP_ID).currentUser?.logOut()
-                }
-            }) {
-                Text(text = "Logout")
-            }
-        }
+        HomeScreen(onMenuClicked = onMenuClicked, navigateToWriteScreen = navigateToWriteScreen)
     }
 }
 
