@@ -21,7 +21,6 @@ fun DisplayAlertDialog(
 ) {
     if (isDialogOpen) {
         AlertDialog(
-            modifier = Modifier.padding(horizontal = 24.dp),
             title = {
                 Text(
                     text = title, fontSize = MaterialTheme.typography.headlineSmall.fontSize,
