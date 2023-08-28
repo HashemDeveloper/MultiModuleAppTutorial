@@ -8,15 +8,22 @@ import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
 import io.realm.kotlin.mongodb.GoogleAuthType
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AuthenticationViewModel : ViewModel() {
+    var authenticated = mutableStateOf(false)
+        private set
     var loadingState = mutableStateOf(false)
         private set
 
     fun setLoading(loading: Boolean) {
         loadingState.value = loading
+    }
+
+    fun setAuthenticated(isAuthenticated: Boolean) {
+        authenticated.value = isAuthenticated
     }
 
     fun signingWithMongoAtlas(
@@ -38,6 +45,8 @@ class AuthenticationViewModel : ViewModel() {
                 }
                 withContext(Dispatchers.Main) {
                     onSuccess.invoke(result)
+                    delay(600)
+                    setAuthenticated(true)
                 }
             } catch (ex: Exception) {
                 withContext(Dispatchers.Main) {

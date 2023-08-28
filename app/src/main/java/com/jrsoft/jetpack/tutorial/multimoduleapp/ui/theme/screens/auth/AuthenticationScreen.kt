@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import com.jrsoft.jetpack.tutorial.multimoduleapp.utils.Constants
 import com.stevdzasan.messagebar.ContentWithMessageBar
 import com.stevdzasan.messagebar.MessageBarState
@@ -15,11 +16,13 @@ import com.stevdzasan.onetap.OneTapSignInWithGoogle
 @Composable
 fun AuthenticationScreen(
     state: OneTapSignInState,
+    authenticated: Boolean,
     loadingState: Boolean,
     messageBarState: MessageBarState,
     onSignInClicked: () -> Unit,
     onTokenIdReceived: (String) -> Unit,
-    onDialogDismissed: (String) -> Unit
+    onDialogDismissed: (String) -> Unit,
+    navigateToHome: () -> Unit,
 ) {
     Scaffold(content = {
         ContentWithMessageBar(messageBarState = messageBarState) {
@@ -35,4 +38,9 @@ fun AuthenticationScreen(
         onDialogDismissed = { message ->
             onDialogDismissed.invoke(message)
         })
+    LaunchedEffect(key1 = authenticated) {
+        if (authenticated) {
+            navigateToHome.invoke()
+        }
+    }
 }

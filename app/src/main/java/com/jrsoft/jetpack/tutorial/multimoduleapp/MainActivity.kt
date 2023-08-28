@@ -14,6 +14,8 @@ import androidx.navigation.compose.rememberNavController
 import com.jrsoft.jetpack.tutorial.multimoduleapp.navigation.Screen
 import com.jrsoft.jetpack.tutorial.multimoduleapp.navigation.SetupNavigationGraph
 import com.jrsoft.jetpack.tutorial.multimoduleapp.ui.theme.MultiModuleAppTheme
+import com.jrsoft.jetpack.tutorial.multimoduleapp.utils.Constants.MONGO_DB_APP_ID
+import io.realm.kotlin.mongodb.App
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,11 +37,15 @@ private fun EntryPoint() {
         ) {
             val navController = rememberNavController()
             SetupNavigationGraph(
-                startDestination = Screen.Authentication.route,
+                startDestination = getStartDestination(),
                 navController = navController
             )
         }
     }
+}
+private fun getStartDestination(): String {
+    val user = App.Companion.create(MONGO_DB_APP_ID).currentUser
+    return if (user != null && user.loggedIn) Screen.Home.route else Screen.Authentication.route
 }
 
 @Preview(showBackground = true)
